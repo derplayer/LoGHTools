@@ -1,0 +1,4 @@
+EXPORTS
+    microvision_decompress @1
+    microvision_free @2
+    sub_41A000 @3
