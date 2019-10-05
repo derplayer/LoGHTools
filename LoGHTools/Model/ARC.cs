@@ -25,6 +25,7 @@ namespace LoGHTools.Model
 
         //There are still informations in header (with padding) but i will just read em in blindly for now (enough for decompress)
         public byte[] HeaderLeftover { get; set; }
+        public byte[] NamePadding { get; set; }    //Padding after String block (dynamic size)
 
         public byte[] GetBytes()
         {
@@ -63,11 +64,13 @@ namespace LoGHTools.Model
         public int NameOffset { get; set; }
         public int NameLength { get; set; }
         public int Offset { get; set; }            // Position of the archive where is located the file
+        public int OffsetEnd { get; set; }
         public int Zsize { get; set; }             // Size of the compressed data in the archive
         public int Size { get; set; }              // Size of the uncompressed file
 
         public byte[] Data { get; set; }
         public byte[] DataDecompressed { get; set; }
+        public byte[] DataPadding { get; set; }
     }
 
     [Serializable]
@@ -84,6 +87,14 @@ namespace LoGHTools.Model
         public ARCHeader arcHeader { get; set; }
         public List<ARCToc> arcToc { get; set; }
 
+        private byte[] addByteToArray(byte[] bArray, byte newByte)
+        {
+            byte[] newArray = new byte[bArray.Length + 1];
+            bArray.CopyTo(newArray, 1);
+            newArray[0] = newByte;
+            return newArray;
+        }
+
         public byte[] GetTocBytes()
         {
             using (MemoryStream stream = new MemoryStream())
@@ -92,60 +103,55 @@ namespace LoGHTools.Model
                 {
                     foreach (var localToc in arcToc)
                     {
+                        //3 byte padding
+                        writer.Write((byte)0); 
+                        writer.Write((byte)0);
+                        if(arcToc.First() != localToc)
+                            writer.Write((byte)0);
+
                         for (int j = 1; j <= 5; j++)
                         {
-                            List<byte> tmpLst = new List<byte>();
-                            
+                            byte[] tmpBytes = new byte[4];
+
+                            var tmpPos = writer.BaseStream.Position;
                             switch (j)
                             {
                                 case 1:
-                                    tmpLst.AddRange(BitConverter.GetBytes(localToc.NameOffset));
+                                    tmpBytes = BitConverter.GetBytes(localToc.NameOffset);
                                     break;
                                 case 2:
-                                    tmpLst.AddRange(BitConverter.GetBytes(localToc.NameLength));
+                                    tmpBytes = BitConverter.GetBytes(localToc.NameLength);
                                     break;
                                 case 3:
-                                    tmpLst.AddRange(BitConverter.GetBytes(localToc.Offset));
+                                    tmpBytes = BitConverter.GetBytes(localToc.Offset);
                                     break;
                                 case 4:
-                                    tmpLst.AddRange(BitConverter.GetBytes(localToc.Zsize));
+                                    tmpBytes = BitConverter.GetBytes(localToc.Zsize);
                                     break;
                                 case 5:
-                                    tmpLst.AddRange(BitConverter.GetBytes(localToc.Size));
+                                    tmpBytes = BitConverter.GetBytes(localToc.Size);
                                     break;
                                 default:
                                     throw new Exception("NOPE!");
                             }
 
-                            var VAL1 = tmpLst[0];
-                            var VAL2 = tmpLst[1];
-                            var VAL3 = tmpLst[2];
-                            var VAL4 = tmpLst[3];
-
-                            //reader.BaseStream.Seek(6, SeekOrigin.Current);
-                            //var VAL2 = localToc.NameLength
-                            //reader.BaseStream.Seek(6, SeekOrigin.Current);
-                            //var VAL3 = localToc.Offset
-                            //reader.BaseStream.Seek(6, SeekOrigin.Current);
-                            //var VAL4 = localToc.Zsize
-                            //reader.BaseStream.Seek(6, SeekOrigin.Current);
-
-                            //var tmpVal = (VAL1 | (VAL2 << 8) | (VAL3 << 16) | (VAL4 << 24));
+                            writer.Write(tmpBytes[0]);
+                            writer.Seek(6, SeekOrigin.Current);
+                            writer.Write(tmpBytes[1]);
+                            writer.Seek(6, SeekOrigin.Current);
+                            writer.Write(tmpBytes[2]);
+                            writer.Seek(6, SeekOrigin.Current);
+                            writer.Write(tmpBytes[3]);
+                            if(j != 5) writer.Seek((int)tmpPos + 1, SeekOrigin.Begin);
 
                         }
 
-                        //writer.Write(HeaderIdentifier);
-                        //writer.Write(TocPointer);
-                        //writer.Write(UnknownType);
-                        //writer.Write((byte)0);
-                        //writer.Write((byte)0);
-                        //writer.Write((byte)0);
-
-                        //TODO: Padding...
+                        writer.Write((byte)0);
+                        writer.Write((byte)0);
+                        writer.Write((byte)0);
                     }
+                    return stream.ToArray();
                 }
-
-                return stream.ToArray();
             }
         }
 
