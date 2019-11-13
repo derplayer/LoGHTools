@@ -49,7 +49,7 @@ namespace LoGHTools
                     //Parse Header
                     reader.BaseStream.Seek(0, SeekOrigin.Begin);
                     tmpHeader.HeaderIdentifier = reader.ReadBytes(4);
-                    tmpHeader.TocPointer = reader.ReadByte();
+                    tmpHeader.FileReaderBufferSize = reader.ReadByte();
                     tmpHeader.UnknownType = reader.ReadByte();
 
                     reader.BaseStream.Seek(3, SeekOrigin.Current); //0x00 three times
@@ -152,50 +152,6 @@ namespace LoGHTools
                         reader.BaseStream.Seek(27, SeekOrigin.Current);
                     }
 
-                    //Read out all paddings between offsets
-                    foreach (var tocX in tmpToc.Select((value, i) => new { i, value }))
-                    {
-                        var toc = tocX.value;
-                        var index = tocX.i;
-                        ARCToc nextToc = null;
-                        if (index+1 != tmpToc.Count)
-                            nextToc = tmpToc[index + 1];
-
-                        if (nextToc == null)
-                        {
-                            //List<byte> tmpEofPadding = new List<byte>();
-                            ////Read until EOF
-                            //while (reader.BaseStream.Position != reader.BaseStream.Length)
-                            //{
-                            //    tmpEofPadding.Add(reader.ReadByte());
-                            //}
-                            //toc.DataPadding = tmpEofPadding.ToArray();
-                            toc.DataPadding = null;
-                            break;
-                        }
-
-                        reader.BaseStream.Seek(toc.OffsetEnd, SeekOrigin.Begin);
-                        int paddingCount = nextToc.Offset - toc.OffsetEnd;
-                        toc.DataPadding = reader.ReadBytes(paddingCount);
-
-                    }
-
-                    ARCToc lastToc = tmpToc.LastOrDefault();
-                    if (lastToc == null) throw new Exception("Container is empty?");
-
-                    //Get Last TOC element -> get string position -> iterate string until you find 0x00 -> copy it until you find FF (begin of first compressed item)
-                    reader.BaseStream.Seek(lastToc.NameOffset + lastToc.NameLength, SeekOrigin.Begin);
-
-                    byte tmpValue = 0x00;
-                    List<byte> tmpNamePadding = new List<byte>();
-                    //Read until 0xFF
-                    while (true) {
-                        tmpValue = reader.ReadByte();
-                        if (tmpValue == 0xFF) break;
-                        else tmpNamePadding.Add(tmpValue);
-                    }
-
-                    tmpHeader.NamePadding = tmpNamePadding.ToArray();
                 }
 
                 //PHASE 2: Export data from memory to Filesystem
@@ -246,9 +202,9 @@ namespace LoGHTools
                     fs.Write(tmpHeader, 0, tmpHeader.Length);
 
                     //TODO: we just need the length of the old header for first (blank out) beacuase we need to update the data pointer anyway later after write operation
+                    //TODO: dynamic header padding
                     byte[] tocBytes = tmpSer.GetTocBytes();
                     fs.Write(tocBytes, 0, tocBytes.Length);
-                    
 
                     //tof to string padding
                     for (int i = 0; i < 97; i++) fs.WriteByte((byte)0);
@@ -261,8 +217,9 @@ namespace LoGHTools
                         fs.WriteByte((byte)0);
                     }
 
-                    //Write cached padding until content begins
-                    fs.Write(tmpSer.arcHeader.NamePadding, 0, tmpSer.arcHeader.NamePadding.Length);
+                    //Write 0x80 based padding until content ends
+                    while(fs.Position % 128 != 0)
+                        fs.WriteByte((byte)0);
 
                     //Write Filecontent (and correct the decompressed new pointer and padd out until previous to next data pointer!)
                     foreach (var toc in tmpSer.arcToc)
@@ -272,8 +229,10 @@ namespace LoGHTools
 
                         //Get the actual stream position and update header
                         fs.Write(toc.DataDecompressed, 0, toc.DataDecompressed.Length);
-                        if(toc.DataPadding != null)
-                            fs.Write(toc.DataPadding, 0, toc.DataPadding.Length);
+
+                        //Write 0x80 based padding until content ends
+                        while (fs.Position % 128 != 0 && toc != tmpSer.arcToc.LastOrDefault())
+                            fs.WriteByte((byte)0);
                     }
 
                     //Update Toc pointers and write again
@@ -283,5 +242,24 @@ namespace LoGHTools
                 }
             }
         }
+
+        private void button_HeaderDump_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "LoGH Containers|*.mvx;*.arc";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                ARCHeader tmpHeader = new ARCHeader();
+                List<ARCToc> tmpToc = new List<ARCToc>();
+
+                using (BinaryReader reader = new BinaryReader(new FileStream(openFileDialog.FileName, FileMode.Open)))
+                {
+                    //Parse Header
+                    reader.BaseStream.Seek(0, SeekOrigin.Begin);
+                    tmpHeader.HeaderIdentifier = reader.ReadBytes(4);
+                }
+            }
+        }
+
     }
 }

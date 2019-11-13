@@ -12,7 +12,7 @@ namespace LoGHTools.Model
     public class ARCHeader
     {
         public byte[] HeaderIdentifier { get; set; }        // 0x01-0x03            - Always "ARC1"
-        public byte TocPointer { get; set; }                // 0x04                 - Always 0x80
+        public byte FileReaderBufferSize { get; set; }      // 0x04                 - Always 0x80 (game filestream reads in 128 byte chunks)
         public byte UnknownType { get; set; }               // 0x05                 - 0x20, 0x40, 0x60
                                                             // 0x06, 0x07 & 0x08    - Always empty - 0x00
         public byte UnknownValue1 { get; set; }             // 0x09                 - Seems to get bigger when more file in Container
@@ -25,7 +25,6 @@ namespace LoGHTools.Model
 
         //There are still informations in header (with padding) but i will just read em in blindly for now (enough for decompress)
         public byte[] HeaderLeftover { get; set; }
-        public byte[] NamePadding { get; set; }    //Padding after String block (dynamic size)
 
         public byte[] GetBytes()
         {
@@ -36,7 +35,7 @@ namespace LoGHTools.Model
                 using (BinaryWriter writer = new BinaryWriter(stream))
                 {
                     writer.Write(HeaderIdentifier);
-                    writer.Write(TocPointer);
+                    writer.Write(FileReaderBufferSize);
                     writer.Write(UnknownType);
                     writer.Write((byte)0);
                     writer.Write((byte)0);
@@ -70,7 +69,6 @@ namespace LoGHTools.Model
 
         public byte[] Data { get; set; }
         public byte[] DataDecompressed { get; set; }
-        public byte[] DataPadding { get; set; }
     }
 
     [Serializable]

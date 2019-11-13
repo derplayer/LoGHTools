@@ -32,6 +32,7 @@
             this.button_DecompressBatch = new System.Windows.Forms.Button();
             this.button_Pack = new System.Windows.Forms.Button();
             this.button_PackBatch = new System.Windows.Forms.Button();
+            this.button_HeaderDump = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button_Decompress
@@ -72,11 +73,22 @@
             this.button_PackBatch.Text = "Pack (Recrusive)";
             this.button_PackBatch.UseVisualStyleBackColor = true;
             // 
+            // button_HeaderDump
+            // 
+            this.button_HeaderDump.Location = new System.Drawing.Point(12, 394);
+            this.button_HeaderDump.Name = "button_HeaderDump";
+            this.button_HeaderDump.Size = new System.Drawing.Size(250, 44);
+            this.button_HeaderDump.TabIndex = 4;
+            this.button_HeaderDump.Text = "Dump Header Values";
+            this.button_HeaderDump.UseVisualStyleBackColor = true;
+            this.button_HeaderDump.Click += new System.EventHandler(this.button_HeaderDump_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(525, 450);
+            this.Controls.Add(this.button_HeaderDump);
             this.Controls.Add(this.button_PackBatch);
             this.Controls.Add(this.button_Pack);
             this.Controls.Add(this.button_DecompressBatch);
@@ -93,6 +105,7 @@
         private System.Windows.Forms.Button button_DecompressBatch;
         private System.Windows.Forms.Button button_Pack;
         private System.Windows.Forms.Button button_PackBatch;
+        private System.Windows.Forms.Button button_HeaderDump;
     }
 }
 
