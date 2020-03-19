@@ -23,11 +23,6 @@ namespace LoGHTools
             InitializeComponent();
         }
 
-        [DllImport("MicrovisionDLL.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr microvision_decompress(IntPtr inData, int osize, int insz);
-        [DllImport("MicrovisionDLL.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void microvision_free(IntPtr buffer);
-
         private void button_Decompress_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -134,19 +129,8 @@ namespace LoGHTools
                         }
                         else
                         {
-                            byte[] pInBuffer = localToc.Data;
-
-                            //allocate unmanaged memory
-                            IntPtr inputBuffer = Marshal.AllocHGlobal(pInBuffer.Length * sizeof(byte));
-                            Marshal.Copy(pInBuffer, 0, inputBuffer, pInBuffer.Length);
-
-                            IntPtr result = microvision_decompress(inputBuffer, localToc.Size + 1, localToc.Zsize);
-                            localToc.DataDecompressed = new byte[localToc.Size];
-                            Marshal.Copy(result, localToc.DataDecompressed, 0, localToc.Size);
-
-                            //free allocated memory
-                            Marshal.FreeHGlobal(inputBuffer);
-                            microvision_free(result);
+                            //decompress with lzss
+                            localToc.DataDecompressed = LZSS.Decompress(localToc.Data);
                         }
 
                         reader.BaseStream.Seek(27, SeekOrigin.Current);

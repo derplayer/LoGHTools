@@ -62,7 +62,6 @@ namespace LoGHTools.Model
         }
     }
 
-    //WORD--------------
     /// <summary>
     /// Compressed word(2 bytes) of the LZSS compression
     /// </summary>
@@ -76,8 +75,8 @@ namespace LoGHTools.Model
         /// Length of the compressed word
         /// </summary>
         public ushort Length { get; set; }
-        private ushort LengthField = 4;
-        private ushort LengthBias = 3;
+        private byte LengthField = 4;
+        private byte LengthBias = 2;
 
         public LoGHCompressedWord(ushort offset, ushort length)
         {
@@ -90,8 +89,8 @@ namespace LoGHTools.Model
             byte lower = data[0];
             byte higher = data[1];
 
-            Offset = lower;
-            Offset |= (ushort)((higher & 0xF0) << LengthField);
+            Offset = (ushort)(lower << LengthField);
+            Offset |= (ushort)((higher & 0xF0) >> LengthField);
             Length = (ushort)((higher & 0x0F) + LengthBias);
         }
 
@@ -121,7 +120,7 @@ namespace LoGHTools.Model
         /// <returns>Decompressed data</returns>
         public static byte[] Decompress(byte[] data, int length = -1)
         {
-            LoGHBuffer loghBuffer = new LoGHBuffer(4096, 0xFEE);
+            LoGHBuffer loghBuffer = new LoGHBuffer(4096, 0x01);
             int wordLength = 2;
 
             using (MemoryStream writer = new MemoryStream())
@@ -130,7 +129,7 @@ namespace LoGHTools.Model
                 {
                     bool[] flags = GetFlags(data[i]);
 
-                    for (int j = 7; j >= 0; j--)
+                    for (int j = 0; j <= 7; j++)
                     {
                         if (flags[j])
                         {
@@ -166,61 +165,6 @@ namespace LoGHTools.Model
                     }
                 }
                 return writer.ToArray();
-            }
-        }
-
-        public unsafe static void Decompress2(byte[] decom, byte[] com, int comSize)
-        {
-            byte[] dict = new byte[4096];
-            fixed (byte* pDict = dict, p1 = decom, p2 = com)
-            {
-                byte* pDecom = p1, pCom = p2;
-
-                byte next;
-                int r6 = 0, r7 = 0xfee, r10, r9;
-
-                while (true)
-                {
-                    r6 >>= 1;
-
-                    if ((r6 & 0x100) == 0)
-                    {
-                        if (comSize-- == 0)
-                            return;
-
-                        r6 = 0xFF00 | *(pCom++);
-                    }
-
-                    if ((r6 & 1) == 1)
-                    {
-                        if (comSize-- == 0)
-                            return;
-
-                        next = *(pCom++);
-                        *(pDecom++) = next;
-                        *(pDict + r7) = next;
-                        r7 = (r7 + 1) & 0xFFF;
-                    }
-                    else
-                    {
-                        if ((comSize -= 2) <= 0)
-                            return;
-
-                        r10 = (*(pCom++) << 8) | *(pCom++);
-
-                        r9 = r10 >> 4;
-                        r10 = (r10 & 0xF) + 2;
-
-                        for (int i = r10 + 1; i > 0; --i)
-                        {
-                            r10 = r9++ & 0xFFF;
-                            next = *(pDict + r10);
-                            *(pDecom++) = next;
-                            *(pDict + r7) = next;
-                            r7 = (r7 + 1) & 0xfff;
-                        }
-                    }
-                }
             }
         }
 
