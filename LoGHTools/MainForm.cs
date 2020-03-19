@@ -161,9 +161,16 @@ namespace LoGHTools
                     //Check name for sub-folders - when there are some - create
                     Directory.CreateDirectory(Path.GetDirectoryName(outputFolderPath + "//" + toc.Name));
 
+                    //Decompressed file
                     using (FileStream fs = File.Create(outputFolderPath + "//" + toc.Name))
                     {
                         fs.Write(toc.DataDecompressed, 0, toc.DataDecompressed.Length);
+                    }
+
+                    //Compressed file
+                    using (FileStream fs = File.Create(outputFolderPath + "//" + toc.Name + "_COMP"))
+                    {
+                        fs.Write(toc.Data, 0, toc.Data.Length);
                     }
                 }
 
@@ -261,5 +268,23 @@ namespace LoGHTools
             }
         }
 
+        private void button_decompDbg_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "binary dump|*.*";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                byte[] dump = File.ReadAllBytes(openFileDialog.FileName);
+                byte[] decompDump = LZSS.Decompress(dump);
+                var outputFolderPath = Path.GetDirectoryName(openFileDialog.FileName);
+
+                //Decompressed file
+                using (FileStream fs = File.Create(outputFolderPath + "//" + "decompressed_blob.bin"))
+                {
+                    fs.Write(decompDump, 0, decompDump.Length);
+                }
+
+            }
+        }
     }
 }

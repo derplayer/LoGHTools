@@ -33,6 +33,7 @@
             this.button_Pack = new System.Windows.Forms.Button();
             this.button_PackBatch = new System.Windows.Forms.Button();
             this.button_HeaderDump = new System.Windows.Forms.Button();
+            this.button_decompDbg = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button_Decompress
@@ -83,11 +84,22 @@
             this.button_HeaderDump.UseVisualStyleBackColor = true;
             this.button_HeaderDump.Click += new System.EventHandler(this.button_HeaderDump_Click);
             // 
+            // button_decompDbg
+            // 
+            this.button_decompDbg.Location = new System.Drawing.Point(268, 394);
+            this.button_decompDbg.Name = "button_decompDbg";
+            this.button_decompDbg.Size = new System.Drawing.Size(250, 44);
+            this.button_decompDbg.TabIndex = 5;
+            this.button_decompDbg.Text = "Decompress a compressed export (debug)";
+            this.button_decompDbg.UseVisualStyleBackColor = true;
+            this.button_decompDbg.Click += new System.EventHandler(this.button_decompDbg_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(525, 450);
+            this.Controls.Add(this.button_decompDbg);
             this.Controls.Add(this.button_HeaderDump);
             this.Controls.Add(this.button_PackBatch);
             this.Controls.Add(this.button_Pack);
@@ -106,6 +118,7 @@
         private System.Windows.Forms.Button button_Pack;
         private System.Windows.Forms.Button button_PackBatch;
         private System.Windows.Forms.Button button_HeaderDump;
+        private System.Windows.Forms.Button button_decompDbg;
     }
 }
 
