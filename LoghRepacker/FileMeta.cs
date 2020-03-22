@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LoghRepacker
 {
-    class FileMeta
+    public class FileMeta
     {
 
     public int compressedDataSize = 0; //important for archived files  make it run
@@ -21,7 +21,7 @@ namespace LoghRepacker
     public int fileDataStartAddress;
     public int fileDataSize;
 
-    public void getFileData(byte[] temp, byte[] archiveBytes)
+    public byte[] getFileData(byte[] temp, byte[] archiveBytes)
     {
         int startOffset = this.fileDataStartAddress;
         int i = 0;
@@ -34,13 +34,15 @@ namespace LoghRepacker
 
         //compressed data
 
+        //this kind of thing neccesary when you want to repack your files arfter unarchive them
+        //compressed and uncompressed data sizes are VERY important for game
 //        temp[i] = 0xff;
-        temp[i] = Convert.ToByte(this.compressedDataSize >> 16);
-        ++i;
-        temp[i] = Convert.ToByte(this.compressedDataSize >> 8);
-        ++i;
-        temp[i] = Convert.ToByte(this.compressedDataSize & 0x00FF);
-
+        //temp[i] = Convert.ToByte(this.compressedDataSize >> 16);
+        //++i;
+        //temp[i] = Convert.ToByte(this.compressedDataSize >> 8);
+        //++i;
+        //temp[i] = Convert.ToByte(this.compressedDataSize & 0x00FF);
+        return temp;
     }
 
     }

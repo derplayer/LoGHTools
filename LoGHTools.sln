@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoGHTools", "LoGHTools\LoGH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoghRepacker", "LoghRepacker\LoghRepacker.csproj", "{FB9E792D-C73B-405F-9CCD-DF031E2602CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcParser", "ArcParser\ArcParser.csproj", "{811E9300-928F-45D8-958D-7FAA55369C8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +20,10 @@ Global
 		{FB9E792D-C73B-405F-9CCD-DF031E2602CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB9E792D-C73B-405F-9CCD-DF031E2602CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB9E792D-C73B-405F-9CCD-DF031E2602CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{811E9300-928F-45D8-958D-7FAA55369C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{811E9300-928F-45D8-958D-7FAA55369C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{811E9300-928F-45D8-958D-7FAA55369C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{811E9300-928F-45D8-958D-7FAA55369C8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

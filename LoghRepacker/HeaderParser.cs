@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LoghRepacker
 {
-    class HeaderParser
+    public class HeaderParser
     {
 
             public byte[] headerBytes;
@@ -66,7 +66,7 @@ namespace LoghRepacker
             public void parseCompressionType()
             {
                 this.compressionType = this.headerBytes[this.headCompressionAddress];
-                printf("Compression type is 0x%02x \n",this.compressionType);
+                printf("Compression type is 0x{0:X} \n",this.compressionType);
             }
 
             void printf(string data, params object[] arg)
@@ -78,19 +78,19 @@ namespace LoghRepacker
             public void parseFileCount()
             {
                 this.fileCount = this.headerBytes[this.headFileCountAddress];
-                printf("[Header Parser] File count is: %d \n",this.fileCount);
+                printf("[Header Parser] File count is: {0}",this.fileCount);
             }
 
             public void parseNameDataStartAddress()
             {
                 this.nameDataStartAddress = ((this.headerBytes[0x12] << 8) | (this.headerBytes[0x13])) + this.headerBytes[0x8];
-                printf("Name data start address : %4x \n",this.nameDataStartAddress);
+                printf("Name data start address : 0x{0:X}",this.nameDataStartAddress);
             }
 
             public void parseMetaStartAddress()
             {
                 this.metaStartAddress = this.headerBytes[this.headMetaStartAddress];
-                printf("Meta start address : %2x \n",this.metaStartAddress);
+                printf("Meta start address : 0x{0:X}",this.metaStartAddress);
             }
 
             public void parseArchiveTypeBytes()
@@ -100,7 +100,7 @@ namespace LoghRepacker
                 this.archiveType[2] = (this.headerBytes[0x2]);
                 this.archiveType[3] = (this.headerBytes[0x3]);
 
-                printf("Archive type : %c%c%c%c \n",this.archiveType[0],this.archiveType[1],this.archiveType[2],this.archiveType[3]);
+                printf("Archive type : {0}{1}{2}{3} \n",this.archiveType[0],this.archiveType[1],this.archiveType[2],this.archiveType[3]);
 
             }
 
