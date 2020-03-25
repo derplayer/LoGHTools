@@ -27,19 +27,27 @@ namespace ArcParser
         //            return;
                     temp = fit.getFileData(temp,fileParser.archiveBytesPointer);
                     
-                    byte[] decompressedBytes = LZSS.Decompress(temp,fit.fileDataSize);
-                    this.extractDataToDirectory(
-                            fit.fileName,
-                            decompressedBytes.Length,
-                            decompressedBytes
-                            );
-                    /*
-                    this.extractDataToDirectory(
-                            fit.fileName,
-                            fit.fileDataSize + 3,
-                            temp
-                            );
-                    */
+                    byte archiveByte = fileParser.getHeaderParser().compressionType;
+
+                    if (archiveByte == CompressionEnums._COMPRESSED)
+                    {
+                        byte[] decompressedBytes = LZSS.Decompress(temp, fit.fileDataSize);
+                        this.extractDataToDirectory(
+                                fit.fileName,
+                                decompressedBytes.Length,
+                                decompressedBytes
+                                );
+                    }
+                    else if (archiveByte == CompressionEnums._DECOPRESSED)
+                    {
+                        
+                        this.extractDataToDirectory(
+                                fit.fileName,
+                                fit.fileDataSize + 3,
+                                temp
+                                );
+                        
+                    }
                 }
             }
 

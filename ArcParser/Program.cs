@@ -12,7 +12,9 @@ namespace ArcParser
         static void Main(string[] args)
         {
 
+                //target archive to parse and create seperated files
                 string fileName = "C:\\Users\\d\\CLionProjects\\logh-arc-packer\\test\\datatable.mvx";
+
             //    string fileName = "../output_test/bin/my.datatable.arc";
                 //if(argc >= 2) fileName = argv[1];
                 //else printf("please provide file name \n");

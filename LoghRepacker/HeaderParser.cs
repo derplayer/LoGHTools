@@ -40,7 +40,7 @@ namespace LoghRepacker
 
                 this.parseArchiveTypeBytes();
                 this.parseMetaStartAddress();
-
+                this.parseCompressionType();
                 this.parseNameDataStartAddress();
                 this.parseFileCount();
             }

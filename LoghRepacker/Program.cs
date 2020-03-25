@@ -13,6 +13,8 @@ namespace LoghRepacker
 
             
             FileReader f = new FileReader();
+
+            //root directory of files to repack
             f.setRootDirectory("C:\\Users\\d\\CLionProjects\\logh-arc-packer\\output_test");
 
             ArcPacker a = new ArcPacker();

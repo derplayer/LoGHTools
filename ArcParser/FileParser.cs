@@ -23,6 +23,11 @@ namespace ArcParser
             this.setHeaderParser(new HeaderParser());
         }
 
+        public HeaderParser getHeaderParser()
+        {
+            return this.headerParser;
+        }
+        
         public void setHeaderParser(HeaderParser headerParser)
         {
             this.headerParser = headerParser;
