@@ -13,12 +13,13 @@ namespace ArcParser
         {
 
                 //target archive to parse and create seperated files
-                string fileName = "C:\\Users\\d\\CLionProjects\\logh-arc-packer\\test\\datatable.mvx";
-
+                string archiveFileName = "C:\\Users\\d\\CLionProjects\\logh-arc-packer\\test\\datatable.mvx";
+                string extractDirectory = "C:\\Users\\d\\CLionProjects\\logh-arc-packer\\output_test";
+ 
             //    string fileName = "../output_test/bin/my.datatable.arc";
                 //if(argc >= 2) fileName = argv[1];
                 //else printf("please provide file name \n");
-                FileStream f = File.Open(fileName,FileMode.OpenOrCreate,FileAccess.ReadWrite);
+                FileStream f = File.Open(archiveFileName,FileMode.OpenOrCreate,FileAccess.ReadWrite);
                 
 
                 //fseek(f,0L,SEEK_END); //send pointer to end of file
@@ -35,7 +36,8 @@ namespace ArcParser
 
                 Console.WriteLine("size of file: %lu {0}", buffer.Length);
                 ArcParser arcParser = new ArcParser(buffer,fsize);
-
+                arcParser.setExtractDirectory(extractDirectory);
+                arcParser.run();
                 Console.WriteLine("DONE");
 
                 Console.ReadKey();

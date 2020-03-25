@@ -11,7 +11,7 @@ namespace ArcParser
     class FileExtractor
     {
 
-        string extractDirectory = "C:\\Users\\d\\CLionProjects\\logh-arc-packer\\output_test";
+            public string extractDirectory;
 
 
             public void extractFilesToDirectory(FileParser fileParser)

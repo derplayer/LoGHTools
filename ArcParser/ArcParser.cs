@@ -40,10 +40,18 @@ namespace ArcParser
             //parse
 
 
+        }
+
+        public void run()
+        {
             this.debugLines();
             this.extractFiles();
         }
 
+        public void setExtractDirectory(string extractDirctory)
+        {
+            this.fileExtractor.extractDirectory = extractDirctory;
+        }
         public void extractFiles()
         {
             this.fileExtractor.extractFilesToDirectory(this.fileParser);
