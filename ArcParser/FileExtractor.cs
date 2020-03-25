@@ -26,11 +26,20 @@ namespace ArcParser
                     temp = new byte[tempSize];
         //            return;
                     temp = fit.getFileData(temp,fileParser.archiveBytesPointer);
+                    
+                    byte[] decompressedBytes = LZSS.Decompress(temp,fit.fileDataSize);
                     this.extractDataToDirectory(
                             fit.fileName,
-                            fit.fileDataSize+3,
+                            decompressedBytes.Length,
+                            decompressedBytes
+                            );
+                    /*
+                    this.extractDataToDirectory(
+                            fit.fileName,
+                            fit.fileDataSize + 3,
                             temp
                             );
+                    */
                 }
             }
 

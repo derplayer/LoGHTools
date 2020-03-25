@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArcPacker.cs" />
+    <Compile Include="CompressionEnums.cs" />
     <Compile Include="FileMeta.cs" />
     <Compile Include="FileReader.cs" />
     <Compile Include="HeaderParser.cs" />

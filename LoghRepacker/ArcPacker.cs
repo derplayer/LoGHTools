@@ -47,7 +47,7 @@ namespace LoghRepacker
             header.setArchType(archType);
             header.parseArchiveTypeBytes();
 
-            header.setCompressionType(0x3);
+            header.setCompressionType(CompressionEnums._DECOPRESSED);
             header.parseCompressionType();
 
             header.headerBytes[header.headMetaStartAddress] = 0x80;

@@ -44,6 +44,7 @@
     <Compile Include="ArcParser.cs" />
     <Compile Include="FileExtractor.cs" />
     <Compile Include="FileParser.cs" />
+    <Compile Include="LZSS.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
