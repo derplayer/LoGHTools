@@ -14,7 +14,7 @@ namespace LoghRepacker
         string rootDirectory;
         string exportFileName;
         FileReader fileReader;
-        char archiveFileNameSeparator = '.';
+        char archiveFileNameSeparator = '\u0000';
 
         public void setRootDirecotry(string r)
         {
@@ -235,7 +235,7 @@ namespace LoghRepacker
             {
                 //string tempFileName = "bin/"+*t+" ";
                 string theTemp = tempFileName.Remove(0, 1).Replace('\\', '/');
-                theTemp += '\u0000';
+                theTemp += this.archiveFileNameSeparator;
 
                 for (int i = 0; i < theTemp.Length; ++i)
                 {
@@ -246,9 +246,7 @@ namespace LoghRepacker
                 bufferPointer += theTemp.Length;
             }
 
-        bufferPointer += 249+16; //space for data
-
-
+            bufferPointer += 249+16; //space for data
 
 
 
