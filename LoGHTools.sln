@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30309.148
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoGHTools", "LoGHTools\LoGHTools.csproj", "{355AE6A8-BF82-433B-90F9-34B7AAF1E740}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoghRepacker", "LoghRepacker\LoghRepacker.csproj", "{FB9E792D-C73B-405F-9CCD-DF031E2602CF}"

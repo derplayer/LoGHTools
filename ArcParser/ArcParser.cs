@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LoghRepacker;
+using System.IO;
 
 namespace ArcParser
 {
@@ -16,15 +17,43 @@ namespace ArcParser
         public int archiveSize = 0;
         HeaderParser headerParser;
         FileParser fileParser;
-        FileExtractor fileExtractor;
-        public ArcParser( byte[] archive, int archiveSize )
+        FileExtractor fileExtractor = new FileExtractor();
+        public string archiveFileName;
+
+        public void setArchiveFileName(string fileName)
         {
-            this.archiveBytes = archive;
+            this.archiveFileName = fileName;
+        }
+
+
+        public void init()
+        {
+
+            //    string fileName = "../output_test/bin/my.datatable.arc";
+            //if(argc >= 2) fileName = argv[1];
+            //else printf("please provide file name \n");
+            FileStream f = File.Open(archiveFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+
+            //fseek(f,0L,SEEK_END); //send pointer to end of file
+            //int fsize = ftell(f); //get position of pointer
+            int fsize = (int)f.Length;
+            //fseek(f,0L,SEEK_SET); //send pointer to beginning of file
+
+            //unsigned char * buffer; //alloc memory as file size
+            //buffer = (unsigned char *)malloc(fsize);
+            byte[] buffer = new byte[fsize];
+            f.Read(buffer, 0, fsize);//read file and fill to buffer
+                                     //fclose(f); //close file so other things can read that file too
+            f.Close();
+            Console.WriteLine("size of file: %lu {0}", buffer.Length);
+
+            this.archiveBytes = buffer;
             this.archiveSize = archiveSize;
             //printf("size archive is: %lu",sizeof(archive));
 
 
-            this.fileExtractor = new FileExtractor();
+            
             //init
             this.initHeaderParser();
             this.initFileParser();
@@ -38,7 +67,6 @@ namespace ArcParser
             this.fileParser.setArchiveBytes(this.archiveBytes);
             this.fileParser.setHeaderParser(this.headerParser);
             //parse
-
 
         }
 

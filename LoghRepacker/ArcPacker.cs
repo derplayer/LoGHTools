@@ -10,18 +10,41 @@ namespace LoghRepacker
     class ArcPacker
     {
 
+
+        string rootDirectory;
+        string exportFileName;
         FileReader fileReader;
-        
-        public void setFileReader(FileReader f)
+
+        public void setRootDirecotry(string r)
         {
-           this.fileReader = f;
+            this.rootDirectory = r;
+        }
+
+        public void setExportFileName(string r)
+        {
+            this.exportFileName = r;
+        }
+
+
+        public List<string> getFileList()
+        {
+            return this.fileReader.getFileNamesForARC();
+        }
+
+        public void init()
+        {
+            this.fileReader = new FileReader();
+            this.fileReader.setRootDirectory(this.rootDirectory);
         }
 
         public void packFiles()
         {
 
             List<string> v = new List<string>();
-            v = this.fileReader.getFileList();
+
+
+            fileReader.setRootDirectory(this.rootDirectory);
+            v = fileReader.getFileList();
 
             int byteSize = 1024 * 1024 * 50;
             var packBytes = new byte[byteSize];
@@ -74,8 +97,8 @@ namespace LoghRepacker
             //        exit(0);
 
             int currentIteration = 0;
-            List<string> fullFileNames = this.fileReader.getFileList();
-            List<string> fileNamesForArc = this.fileReader.getFileNamesForARC();
+            List<string> fullFileNames = fileReader.getFileList();
+            List<string> fileNamesForArc = fileReader.getFileNamesForARC();
             foreach (string fileName in fileNamesForArc)
             //for(int t=0; t!=v.Count; ++t)
             {
@@ -294,11 +317,12 @@ namespace LoghRepacker
 
 
 
+                /*
                 //compressed data size
                 packBytes[0x80 + (32 * fileCount) + 0x6] = (fileBuffer[f.fileDataSize - 1]);
                 packBytes[0x80 + (32 * fileCount) + 0xD] = (fileBuffer[f.fileDataSize - 2]);
                 packBytes[0x80 + (32 * fileCount) + 0x14] = (fileBuffer[f.fileDataSize - 3]);
-
+                */
 
 
                 //            printf("----------------------------------");
@@ -318,7 +342,7 @@ namespace LoghRepacker
 
 
             //string fullPath = "C:\\Users\\user_name\\Desktop\\output_arc\\my.datatable.arc";
-            string fullPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\output_arc\\output.arc";
+            string fullPath = this.exportFileName;
             //std::ofstream file;
             FileStream newOutput = File.Open(fullPath, FileMode.OpenOrCreate);
             newOutput.Write(packBytes,0, bufferPointer);

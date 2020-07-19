@@ -9,7 +9,6 @@ namespace ArcParser
 {
     class FileParser
     {
-
         HeaderParser headerParser;
         int fileMetaLength = 32; // this 32 byte meta data per file
         public List<FileMeta> fit;

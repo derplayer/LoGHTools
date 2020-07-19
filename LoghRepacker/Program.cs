@@ -11,23 +11,23 @@ namespace LoghRepacker
         static void Main(string[] args)
         {
 
-            
-            FileReader f = new FileReader();
-
-            //root directory of files to repack
-            f.setRootDirectory("C:\\Users\\d\\CLionProjects\\logh-arc-packer\\output_test");
 
             ArcPacker a = new ArcPacker();
-            a.setFileReader(f);
+            a.setRootDirecotry(@"C:\Users\can\CLionProjects\logh-arc-packer\output_test");
+            a.setExportFileName(@"C:\Users\can\Desktop\datatable.mvx");
+            a.init();
             a.packFiles();
+            
 
             Console.WriteLine("FILES");
-            foreach (string d in f.getFileNamesForARC())
+            foreach (string d in a.getFileList())
             {
                 Console.WriteLine(d);
             }
             
             Console.WriteLine("DONE");
+            Console.ReadLine();
+
         }
     }
 }
