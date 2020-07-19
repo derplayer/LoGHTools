@@ -130,7 +130,7 @@ namespace LoghRepacker
 
 
                 FileStream file;
-                file = File.Open(filePath, FileMode.Open);
+                file = File.Open(filePath, FileMode.Open,FileAccess.Read);
                 newFileMeta.fileDataSize = (int)file.Length;
                 //fileMetas.push_back(*newFileMeta);
                 fileMetas.Add(newFileMeta);
@@ -330,7 +330,7 @@ namespace LoghRepacker
             //string fullPath = "C:\\Users\\user_name\\Desktop\\output_arc\\my.datatable.arc";
             string fullPath = this.exportFileName;
             //std::ofstream file;
-            FileStream newOutput = File.Open(fullPath, FileMode.OpenOrCreate);
+            FileStream newOutput = File.Open(fullPath, FileMode.OpenOrCreate,FileAccess.Write);
             newOutput.Write(packBytes,0, bufferPointer);
             //file.write((const char *)packBytes, bufferPointer);
             //file.close();
