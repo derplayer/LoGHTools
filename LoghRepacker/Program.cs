@@ -13,8 +13,8 @@ namespace LoghRepacker
 
 
             ArcPacker a = new ArcPacker();
-            a.setRootDirecotry(@"C:\Users\can\CLionProjects\logh-arc-packer\output_test");
-            a.setExportFileName(@"C:\Users\can\Desktop\datatable.mvx");
+            a.setRootDirecotry(@"C:\Users\can\Desktop\arc_output");
+            a.setExportFileName(@"C:\Users\can\Desktop\loading_img.arc");
             a.init();
             a.packFiles();
             
@@ -26,7 +26,6 @@ namespace LoghRepacker
             }
             
             Console.WriteLine("DONE");
-            Console.ReadLine();
 
         }
     }

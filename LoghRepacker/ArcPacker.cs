@@ -14,6 +14,7 @@ namespace LoghRepacker
         string rootDirectory;
         string exportFileName;
         FileReader fileReader;
+        char archiveFileNameSeparator = '.';
 
         public void setRootDirecotry(string r)
         {
@@ -176,14 +177,15 @@ namespace LoghRepacker
             foreach (FileMeta f in fileMetas)
             //for(auto f=fileMetas.begin(); f!=fileMetas.end(); ++f)
             {
+                f.fileStartOffsetPrefix += 64;
                 int packMetaOffsetAddress = bufferPointer + (nextFileMetaByteStartAddressOffset);
-                packBytes[packMetaOffsetAddress + 0x2] = (byte)(f.fileNameStartOffset);
+                packBytes[packMetaOffsetAddress + 0x2] = (byte)(f.fileStartOffsetPrefix + f.fileNameStartOffset);
                 packBytes[packMetaOffsetAddress + 0x3] = (byte)(f.fileNameLength);
                 packBytes[packMetaOffsetAddress + 0x4] = (byte)(f.fileDataStartAddress & 0x0000FF);
 
 
                 //data size
-                int fileDataSize = f.fileDataSize - 3;
+                int fileDataSize = f.fileDataSize;
                 packBytes[packMetaOffsetAddress + 0x13] = (byte)(fileDataSize >> 16);
                 packBytes[packMetaOffsetAddress + 0xC] = (byte)(fileDataSize >> 8);
                 packBytes[packMetaOffsetAddress + 0x5] = (byte)(fileDataSize & 0x00FF);
@@ -195,7 +197,7 @@ namespace LoghRepacker
 
                 //            f->fileStartOffsetPrefix += 64;
                 packBytes[packMetaOffsetAddress + 0x9] = (byte)(f.fileStartOffsetPrefix >> 8); //file name start address part1
-                packBytes[packMetaOffsetAddress + 0xA] = (byte)(f.fileStartOffsetPrefix & 0x00FF); //file name start address part2
+                packBytes[packMetaOffsetAddress + 0xA] = (byte)(0x00); //file name start address part2
 
 
 
@@ -206,18 +208,21 @@ namespace LoghRepacker
 
 
             //file name start address
-            bufferPointer += 32; //name listing address
-            header.headerBytes[0x09] = 0x3D;
+            bufferPointer += 96; //name listing address
+            header.headerBytes[0x09] = 0xF7;
             header.headerBytes[0x0A] = 0x80;
+            header.headerBytes[0x0C]  = 0x02;
             header.headerBytes[0x11] = 0x02;
             header.headerBytes[0x12] = (byte)(bufferPointer >> 8);
             header.headerBytes[0x13] = (byte)(bufferPointer & 0x00FF);
 
-            header.headerBytes[0x14] = 0x03;
-            header.headerBytes[0x15] = 0x01;
+            header.headerBytes[0x14] = 0x02;
+            header.headerBytes[0x15] = 0x00;
             header.headerBytes[0x16] = 0x04;
             header.headerBytes[0x17] = 0xD8;
             header.headerBytes[0x23] = 0x06;
+
+            header.setFileSize(5902336);
 
             for (int i = 0; i < 128; ++i)
             {
@@ -230,7 +235,8 @@ namespace LoghRepacker
             {
                 //string tempFileName = "bin/"+*t+" ";
                 string theTemp = tempFileName.Remove(0, 1).Replace('\\', '/');
-                theTemp += ' '; //im using ' ' instead of 0x20
+                theTemp += '\u0000';
+
                 for (int i = 0; i < theTemp.Length; ++i)
                 {
                     packBytes[bufferPointer + i] = (byte)(theTemp[i]);
@@ -240,7 +246,7 @@ namespace LoghRepacker
                 bufferPointer += theTemp.Length;
             }
 
-            bufferPointer += 64; //space for data
+        bufferPointer += 249+16; //space for data
 
 
 
@@ -305,7 +311,7 @@ namespace LoghRepacker
 
                 //             printf("size is %02x \n",f->fileDataSize);
 
-                for (int i = 0; i < f.fileDataSize - 3; ++i)
+                for (int i = 0; i < f.fileDataSize; ++i)
                 {
                     //                printf("data: %2x \n", fileBuffer[i]);
                     //                printf("write address: %4x \n", fileDataStartAddress);

@@ -22,7 +22,7 @@ namespace ArcParser
         //            unsigned char temp[fileParser->fit->fileDataSize];
 
                     byte[] temp;
-                    int tempSize = fit.fileDataSize+3;
+                    int tempSize = fit.fileDataSize;
                     temp = new byte[tempSize];
         //            return;
                     temp = fit.getFileData(temp,fileParser.archiveBytesPointer);
@@ -43,7 +43,7 @@ namespace ArcParser
                         
                         this.extractDataToDirectory(
                                 fit.fileName,
-                                fit.fileDataSize + 3,
+                                fit.fileDataSize,
                                 temp
                                 );
                         
