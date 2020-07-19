@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ArcParser;
+using LoghRepacker;
 
 namespace PackRePackingForm
 {
@@ -51,6 +52,43 @@ namespace PackRePackingForm
             a.init();
             a.run();
             MessageBox.Show("OK!");
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            tabPage1.Text = "EXPORT ARC FILE";
+            tabPage2.Text = "ARCHIVING";
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                textBox4.Text = folderBrowserDialog.SelectedPath;
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
+            ArcPacker a = new ArcPacker();
+            a.setRootDirecotry(textBox4.Text);
+            a.setExportFileName(textBox3.Text+"\\output.arc");
+            a.init();
+            a.packFiles();
+
+            MessageBox.Show("OK!");
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                textBox3.Text = folderBrowserDialog.SelectedPath;
+            }
         }
     }
 }

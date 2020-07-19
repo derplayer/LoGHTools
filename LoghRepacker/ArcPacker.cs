@@ -7,7 +7,7 @@ using System.IO;
 
 namespace LoghRepacker
 {
-    class ArcPacker
+    public class ArcPacker
     {
 
 
