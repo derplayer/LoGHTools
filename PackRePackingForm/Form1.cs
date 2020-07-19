@@ -71,24 +71,34 @@ namespace PackRePackingForm
 
         private void button5_Click(object sender, EventArgs e)
         {
-
             ArcPacker a = new ArcPacker();
-            a.setRootDirecotry(textBox4.Text);
-            a.setExportFileName(textBox3.Text+"\\output.arc");
-            a.init();
-            a.packFiles();
+            string rootDirectory = textBox4.Text;
+            string exportFileName = "";
+            if(exportFileName == "")
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    exportFileName = saveFileDialog.FileName;
+            }
 
-            MessageBox.Show("OK!");
 
+            if (rootDirectory != "" && exportFileName != "")
+            {
+                a.setRootDirecotry(rootDirectory);
+                a.setExportFileName(exportFileName);
+                a.init();
+                a.packFiles();
+                MessageBox.Show("OK!");
+
+            }
+            else MessageBox.Show("directory or export file name is empty");
         }
 
-        private void button6_Click(object sender, EventArgs e)
+      
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
         {
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
-            {
-                textBox3.Text = folderBrowserDialog.SelectedPath;
-            }
+
         }
     }
 }
