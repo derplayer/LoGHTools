@@ -41,6 +41,9 @@ namespace LoghRepacker
         public void packFiles()
         {
 
+
+            int spaceBetweenFileMetaAndFileNames = 96;
+
             List<string> v = new List<string>();
 
 
@@ -75,10 +78,12 @@ namespace LoghRepacker
             header.parseCompressionType();
 
             header.headerBytes[header.headMetaStartAddress] = 0x80;
-            header.headerBytes[0x5] = 0x20;
+            header.headerBytes[0x5] = 0XA0;
             header.headerBytes[0x6] = 0x0;
             header.headerBytes[0x7] = 0x0;
-            header.headerBytes[0x8] = 0x0;
+            header.headerBytes[0x8] = 0x80;
+            header.headerBytes[0x9] = 0xF7;
+            header.headerBytes[0x23] = 0x5A;
 
             //printf("file count is",header->nextFileMetaByteStartAddressOffset);
 
@@ -87,22 +92,22 @@ namespace LoghRepacker
 
             int fileCounter = 0;
             int lastFileNameSize = 0;
-            int lastFileNameOffset = 0;
 
 
-            //32 is double line space
-            int totalSpentBytes = 128 + (32 * header.fileCount) + 32;
-            int offsetForFileNames = totalSpentBytes;
-            int totalFileNameSize = 0;
-            //        printf("total bytes %d",totalSpentBytes);
-            //        exit(0);
 
+           
+           
             int currentIteration = 0;
             List<string> fullFileNames = fileReader.getFileList();
             List<string> fileNamesForArc = fileReader.getFileNamesForARC();
+            
+            //32 is double line space
+            int totalSpentBytes = 128 + (32 * header.fileCount) + spaceBetweenFileMetaAndFileNames;
+            int preCalculatedFileNamesStartAddress = totalSpentBytes;
+            int totalFileNameSize = 0;
+
             foreach (string fileName in fileNamesForArc)
-            //for(int t=0; t!=v.Count; ++t)
-            {
+            { 
 
 
                 string fakeFileName = fileName;
@@ -115,31 +120,13 @@ namespace LoghRepacker
                 newFileMeta.fileNameLength = fakeFileName.Length;
                 newFileMeta.filePath = filePath;
 
-                if (fileCounter == 0)
-                {
-                    newFileMeta.fileNameStartOffset = 0x00;
-                }
-                else if (totalFileNameSize >= 256)
-                {
+                int fileNameAddress = preCalculatedFileNamesStartAddress + totalFileNameSize;
 
-                    short nextOverflowOffset = (short)(totalFileNameSize - 256);
-                    offsetForFileNames += totalFileNameSize;
 
-                    totalFileNameSize = 0;
-                    //                newFileMeta->fileNameStartOffset = lastFileNameSize + lastFileNameOffset;
-                    newFileMeta.fileNameStartOffset = lastFileNameSize + lastFileNameOffset - nextOverflowOffset;
 
-                }
-                else
-                {
-                    // bin/DDDDDD.jpg
-                    newFileMeta.fileNameStartOffset = lastFileNameSize + lastFileNameOffset;
-                }
-
-                lastFileNameSize = newFileMeta.fileNameLength;
-                lastFileNameOffset = newFileMeta.fileNameStartOffset;
-                newFileMeta.fileStartOffsetPrefix = offsetForFileNames;
-
+                newFileMeta.fileNameStartAddress = fileNameAddress;
+                newFileMeta.fileNameStartAddress = fileNameAddress;
+                totalFileNameSize += newFileMeta.fileNameLength;
 
 
                 FileStream file;
@@ -148,11 +135,10 @@ namespace LoghRepacker
                 //fileMetas.push_back(*newFileMeta);
                 fileMetas.Add(newFileMeta);
                 file.Close();
-                Console.WriteLine("file name start address 0x%04x \n", (lastFileNameOffset + lastFileNameSize));
+                Console.WriteLine("file name start address {0:X} \n", (fileNameAddress));
                 //            printf("file name start offsets 0x%04x \n",lastFileNameOffset);
                 //            printf("file size %d \n",newFileMeta->fileDataSize);
                 fileCounter++;
-                totalFileNameSize += lastFileNameSize;
 
                 currentIteration++;
             }
@@ -177,9 +163,8 @@ namespace LoghRepacker
             foreach (FileMeta f in fileMetas)
             //for(auto f=fileMetas.begin(); f!=fileMetas.end(); ++f)
             {
-                f.fileStartOffsetPrefix += 64;
                 int packMetaOffsetAddress = bufferPointer + (nextFileMetaByteStartAddressOffset);
-                packBytes[packMetaOffsetAddress + 0x2] = (byte)(f.fileStartOffsetPrefix + f.fileNameStartOffset);
+                packBytes[packMetaOffsetAddress + 0x2] = (byte)(f.fileNameStartAddress & 0xFF); //file name start address part2
                 packBytes[packMetaOffsetAddress + 0x3] = (byte)(f.fileNameLength);
                 packBytes[packMetaOffsetAddress + 0x4] = (byte)(f.fileDataStartAddress & 0x0000FF);
 
@@ -195,10 +180,8 @@ namespace LoghRepacker
                 packBytes[packMetaOffsetAddress + 0xD] = (byte)(fileDataSize >> 8);
                 packBytes[packMetaOffsetAddress + 0x6] = (byte)(fileDataSize & 0x00FF);
 
-                //            f->fileStartOffsetPrefix += 64;
-                packBytes[packMetaOffsetAddress + 0x9] = (byte)(f.fileStartOffsetPrefix >> 8); //file name start address part1
-                packBytes[packMetaOffsetAddress + 0xA] = (byte)(0x00); //file name start address part2
-
+                packBytes[packMetaOffsetAddress + 0x9] = (byte)(f.fileNameStartAddress >> 8); //file name start address part1
+                packBytes[packMetaOffsetAddress + 0xA] = 0x00; 
 
 
                 nextFileMetaByteStartAddressOffset += 32;
@@ -208,7 +191,7 @@ namespace LoghRepacker
 
 
             //file name start address
-            bufferPointer += 96; //name listing address
+            bufferPointer += spaceBetweenFileMetaAndFileNames; //name listing address
             header.headerBytes[0x09] = 0xF7;
             header.headerBytes[0x0A] = 0x80;
             header.headerBytes[0x0C]  = 0x02;
@@ -222,7 +205,6 @@ namespace LoghRepacker
             header.headerBytes[0x17] = 0xD8;
             header.headerBytes[0x23] = 0x06;
 
-            header.setFileSize(5902336);
 
             for (int i = 0; i < 128; ++i)
             {
@@ -293,7 +275,7 @@ namespace LoghRepacker
                     packBytes[packMetaOffsetAddress + 0x19] = (byte)(fileDataStartAddress >> 24);
                 }
 
-                Console.WriteLine("file data start address 0x%6x \n", fileDataStartAddress);
+                Console.WriteLine("file data start address {0:X} \n", fileDataStartAddress);
 
                 //newFile = File.Open( "../output_test/"+f.fileName,FileMode.Open);
 

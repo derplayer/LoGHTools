@@ -26,7 +26,6 @@ namespace LoghRepacker
             }
             
             Console.WriteLine("DONE");
-
         }
     }
 }

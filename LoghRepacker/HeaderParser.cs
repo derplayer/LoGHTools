@@ -27,13 +27,6 @@ namespace LoghRepacker
 
             }
 
-            public void setFileSize(int size)
-            {
-                this.headerBytes[0x10] = (byte)(size & 0xFF); //file size suffix
-                this.headerBytes[0x11] = (byte) ((size >> 8) & 0xFF); //filesize middle
-                this.headerBytes[0x23] = (byte) ((size >> 16) & 0xFF); //file size prefix
-            }
-
             public void setHeaderBytes(byte[] fileBytes)
             {
 
