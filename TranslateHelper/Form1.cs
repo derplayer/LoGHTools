@@ -30,10 +30,15 @@ namespace TranslateHelper
             if(op.ShowDialog() == DialogResult.OK)
             {
                 dataGridView1.Rows.Clear();
-                string result = op.FileName;
-                TranslateableREader r = new TranslateableREader();
                 int x = 0;
-                foreach(List<byte> item in r.read(result))
+                FileStream f = File.Open(op.FileName, FileMode.Open, FileAccess.Read);
+                int fsize = (int)f.Length;
+                byte[] content = new byte[fsize];
+                f.Read(content, 0, fsize);
+                f.Close();
+
+                TranslateableREader r = new TranslateableREader();
+                foreach (List<byte> item in r.read(content))
                 {
                     dataGridView1.Rows.Add(x++, Encoding.Default.GetString(item.ToArray()));
                 }

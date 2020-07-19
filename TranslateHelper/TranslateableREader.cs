@@ -12,18 +12,14 @@ namespace TranslateHelper
 
 
 
-        public List<List<byte>> read(string fileName)
+        public List<List<byte>> read(byte[] content)
         {
 
-            FileStream f = File.Open(fileName, FileMode.Open, FileAccess.Read);
-            int fsize = (int)f.Length;
-            byte[] content = new byte[fsize];
-            f.Read(content, 0, fsize);
-            f.Close();
+           
 
             int labelOffset = 0;
             int blockSize = 4096;
-            int labelCount = fsize / blockSize;
+            int labelCount = content.Length / blockSize;
 
             //every string has 4096 byte space so i can pre calculate count of total string
             //and iterate it
