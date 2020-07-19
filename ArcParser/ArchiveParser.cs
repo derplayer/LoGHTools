@@ -8,7 +8,7 @@ using System.IO;
 
 namespace ArcParser
 {
-    class ArcParser
+    public class ArchiveParser
     {
 
         
