@@ -63,7 +63,7 @@ namespace TranslateHelper
                     //once i found the string i can extract the string for translate
                         
 
-                        int sort = content[labelOffset + 1] >> 8 | content[labelOffset] << 8;
+                        int sort = content[labelOffset + 1] << 8 | content[labelOffset];
                         labelOffset += 2;
                         List<byte> label = new List<byte>();
                         while (content[labelOffset] != 0x00)
