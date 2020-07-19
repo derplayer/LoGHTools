@@ -32,7 +32,7 @@ namespace ArcParser
             //    string fileName = "../output_test/bin/my.datatable.arc";
             //if(argc >= 2) fileName = argv[1];
             //else printf("please provide file name \n");
-            FileStream f = File.Open(archiveFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            FileStream f = File.Open(archiveFileName, FileMode.OpenOrCreate, FileAccess.Read);
 
 
             //fseek(f,0L,SEEK_END); //send pointer to end of file

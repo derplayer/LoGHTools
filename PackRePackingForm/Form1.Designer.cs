@@ -153,9 +153,9 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(185, 165);
+            this.button5.Location = new System.Drawing.Point(176, 101);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(132, 106);
+            this.button5.Size = new System.Drawing.Size(172, 130);
             this.button5.TabIndex = 5;
             this.button5.Text = "PACK";
             this.button5.UseVisualStyleBackColor = true;
@@ -163,26 +163,26 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(473, 80);
+            this.button4.Location = new System.Drawing.Point(425, 16);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.Size = new System.Drawing.Size(122, 23);
             this.button4.TabIndex = 4;
-            this.button4.Text = "Choose Files";
+            this.button4.Text = "Choose Directory";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(76, 82);
+            this.textBox4.Location = new System.Drawing.Point(75, 18);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(391, 20);
+            this.textBox4.Size = new System.Drawing.Size(344, 20);
             this.textBox4.TabIndex = 3;
             this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 85);
+            this.label4.Location = new System.Drawing.Point(5, 21);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(49, 13);
             this.label4.TabIndex = 2;

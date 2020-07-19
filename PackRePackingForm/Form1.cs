@@ -45,13 +45,22 @@ namespace PackRePackingForm
 
         private void button3_Click(object sender, EventArgs e)
         {
+            string archiveFileName = textBox1.Text;
+            string extractDirectory = textBox2.Text;
 
-            ArchiveParser a = new ArchiveParser();
-            a.setArchiveFileName(textBox1.Text);
-            a.setExtractDirectory(textBox2.Text);
-            a.init();
-            a.run();
-            MessageBox.Show("OK!");
+            if(archiveFileName == "" || extractDirectory == "")
+            {
+                MessageBox.Show("empty directory");
+            }
+            else
+            {
+                ArchiveParser a = new ArchiveParser();
+                a.setArchiveFileName(archiveFileName);
+                a.setExtractDirectory(extractDirectory);
+                a.init();
+                a.run();
+                MessageBox.Show("OK!");
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
