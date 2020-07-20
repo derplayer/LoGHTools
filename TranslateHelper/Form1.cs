@@ -37,15 +37,61 @@ namespace TranslateHelper
                 f.Read(content, 0, fsize);
                 f.Close();
 
+
                 TranslateableREader r = new TranslateableREader();
-                foreach (List<byte> item in r.read(content))
+                foreach (Translateable item in r.read(content))
                 {
-                    dataGridView1.Rows.Add(x++, Encoding.Default.GetString(item.ToArray()));
+                    dataGridView1.Rows.Add(x++, Encoding.Default.GetString(item.baseString.ToArray()), Encoding.Default.GetString(item.baseString.ToArray()));
                 }
+
+
             }
 
 
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            SaveFileDialog s = new SaveFileDialog();
+
+            if(s.ShowDialog() == DialogResult.OK)
+            {
+                FileStream f = File.Open(s.FileName, FileMode.OpenOrCreate, FileAccess.Write);
+                TranslateableREader r = new TranslateableREader();
+                List<byte> data = new List<byte>();
+
+                foreach (DataGridViewRow item in dataGridView1.Rows)
+                {
+                    byte[] targetString = Encoding.Default.GetBytes(item.Cells["target"].Value.ToString());
+                    string sort = item.Cells["sort"].Value.ToString();
+                    int sortAsInt = Convert.ToInt32(sort);
+                    int offset = sortAsInt * r.getBlockSize();
+
+
+                    List<byte> buffer = new List<byte>();
+
+                    buffer.Add((byte)(sortAsInt & 0XFF));
+                    buffer.Add((byte)(sortAsInt >> 8));
+
+                    foreach (byte x in targetString)
+                        buffer.Add(x);
+
+                    //+2 is comes from 16bit sort which is determines the sort of the string and it might important for internal
+                    //game structures
+                    for (int i = targetString.Length + 1; i <= r.getBlockSize(); i++)
+                        buffer.Add(0);
+
+
+                    foreach (byte x in buffer)
+                        f.WriteByte(x);
+
+                }
+
+                f.Close();
+            }
+
+
+        }
     }
 }
