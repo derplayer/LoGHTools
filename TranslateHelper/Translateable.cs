@@ -10,11 +10,11 @@ namespace TranslateHelper
     {
 
 
-        public int sort;
-        public List<byte> baseString = new List<byte>();
-        public string targetString;
-        
-           
+        public int sort { get; set; }
+        public string baseString { get; set; }
+        public string targetString { get; set; }
+
+       
 
     }
 }

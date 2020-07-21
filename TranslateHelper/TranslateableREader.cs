@@ -52,16 +52,48 @@ namespace TranslateHelper
                 int sort = content[labelOffset + 1] << 8 | content[labelOffset];
                 labelOffset += 2;
                 Translateable translateable = new Translateable();
+                List<byte> s = new List<byte>();
                 while (content[labelOffset] != 0x00)
                 {
-                    translateable.baseString.Add(content[labelOffset]);
+                    s.Add(content[labelOffset]);
                     labelOffset++;
                 }
+                translateable.baseString = Encoding.Default.GetString(s.ToArray());
+                translateable.targetString = translateable.baseString;
+                translateable.sort = sort;
                 strings.Add(translateable);
             }
 
             return strings;
 
         }
+
+
+        public List<byte> translateableToByte(List<Translateable> data)
+        {
+            List<byte> buffer = new List<byte>();
+            foreach (Translateable t in data)
+            {
+                byte[] targetString = Encoding.Default.GetBytes(t.targetString);
+                string sort = t.sort.ToString();
+                int sortAsInt = Convert.ToInt32(sort);
+
+
+
+                buffer.Add((byte)(sortAsInt & 0XFF));
+                buffer.Add((byte)(sortAsInt >> 8));
+
+                foreach (byte x in targetString)
+                    buffer.Add(x);
+
+                //+1 is comes from 16bit sort which is determines the sort of the string and it might important for internal
+                //game structures
+                for (int i = targetString.Length + 1; i <= this.getBlockSize(); i++)
+                    buffer.Add(0);
+
+            }
+            return buffer;
+        }
+
     }
 }
