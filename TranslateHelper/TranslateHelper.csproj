@@ -69,6 +69,23 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="arc_output\bin\character_spec.bin" />
+    <None Include="arc_output\bin\command.bin" />
+    <None Include="arc_output\bin\file.bin" />
+    <None Include="arc_output\bin\img.bin" />
+    <None Include="arc_output\bin\label.bin" />
+    <None Include="arc_output\bin\msg.bin" />
+    <None Include="arc_output\bin\other.bin" />
+    <None Include="arc_output\bin\property.bin" />
+    <None Include="arc_output\bin\sound_info.bin" />
+    <None Include="arc_output\bin\special_skill_def.bin" />
+    <None Include="arc_output\bin\special_skill_spec.bin" />
+    <None Include="arc_output\bin\tactics_map_spec.bin" />
+    <None Include="arc_output\bin\unit_spec.bin" />
+    <None Include="arc_output\bin\weapon_common_spec.bin" />
+    <None Include="arc_output\bin\win.bin" />
+    <None Include="arc_output\bin\win_balloon.bin" />
+    <None Include="arc_output\bin\witty_remarks.bin" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
