@@ -4,6 +4,10 @@ Legend of Galactic Heroes (2008) Modtools
 # Status
 Basic UI elements and map names are machine translated
 
+![](https://github.com/azisyus/LoGHTools/blob/master/readme_assets/ginei_jp.png)
+![](https://github.com/azisyus/LoGHTools/blob/master/readme_assets/ginei_en.jpg)
+
+
 # FILE DESCRIPTIONS IN DATATABLE.MVX
 
 <pre>characters_spec.bin = character names
