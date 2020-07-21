@@ -167,6 +167,25 @@ namespace TranslateHelper
         }
 
 
+        //fill target transation with translate file which translations should be separated by lines
+        private void button6_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog op = new OpenFileDialog();
+
+            if(op.ShowDialog() == DialogResult.OK)
+            {
+                string fileName = op.FileName;
+                StreamReader file = new StreamReader(fileName);
+                string line;
+                int counter = 0;
+                while ((line = file.ReadLine()) != null)
+                {
+                    dataGridView1.Rows[counter].Cells[2].Value = line;
+                    counter++;    
+                }
+
+            }
+        }
     }
 
 }
