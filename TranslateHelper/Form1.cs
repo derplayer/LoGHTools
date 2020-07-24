@@ -21,7 +21,6 @@ namespace TranslateHelper
             InitializeComponent();
         }
 
-        XMLExportImport xmlExportImport = new XMLExportImport();
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -38,25 +37,13 @@ namespace TranslateHelper
                 dataGridView1.DataSource = null;
                 dataGridView1.Rows.Clear();
                 dataGridView1.Columns.Clear();
-                int x = 0;
                 FileStream f = File.Open(op.FileName, FileMode.Open, FileAccess.Read);
                 int fsize = (int)f.Length;
                 byte[] content = new byte[fsize];
                 f.Read(content, 0, fsize);
                 f.Close();
-
-
                 TranslateableREader r = new TranslateableREader();
                 dataGridView1.DataSource = new BindingList<Translateable>(r.read(content));
-                /*
-                foreach (Translateable item in r.read(content))
-                {
-                    string baseString = Encoding.Default.GetString(item.baseString.ToArray());
-                    dataGridView1.Rows.Add(item.sort, baseString, baseString);
-                }
-                */
-
-
             }
 
 
@@ -101,7 +88,7 @@ namespace TranslateHelper
         //serialize button
         private void button3_Click(object sender, EventArgs e)
         {
-
+            XMLExportImport xmlExportImport = new XMLExportImport();
             SaveFileDialog s = new SaveFileDialog();
             s.DefaultExt = "xml";
             s.AddExtension = true;
@@ -109,14 +96,13 @@ namespace TranslateHelper
             {
                 xmlExportImport.export(s.FileName,dataGridView1);
             }
-
         }
 
 
         //load serialized xml to datagridview
         private void button4_Click(object sender, EventArgs e)
         {
-
+            XMLExportImport xmlExportImport = new XMLExportImport();
             OpenFileDialog op = new OpenFileDialog();
             op.DefaultExt = "xml";
             if(op.ShowDialog() == DialogResult.OK)
@@ -126,6 +112,7 @@ namespace TranslateHelper
 
         }
 
+        //google translate button
         private void button5_Click(object sender, EventArgs e)
         {
             foreach (DataGridViewRow item in dataGridView1.Rows)
