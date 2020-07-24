@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.Web;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace TranslateHelper
 {
@@ -24,7 +25,7 @@ namespace TranslateHelper
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         //load translateable game file
@@ -32,7 +33,7 @@ namespace TranslateHelper
         {
 
             OpenFileDialog op = new OpenFileDialog();
-            if(op.ShowDialog() == DialogResult.OK)
+            if (op.ShowDialog() == DialogResult.OK)
             {
                 dataGridView1.DataSource = null;
                 dataGridView1.Rows.Clear();
@@ -49,14 +50,14 @@ namespace TranslateHelper
 
         }
 
-       
+
 
         //export translated for game
         private void button2_Click(object sender, EventArgs e)
         {
 
             SaveFileDialog s = new SaveFileDialog();
-            if(s.ShowDialog() == DialogResult.OK)
+            if (s.ShowDialog() == DialogResult.OK)
             {
                 FileStream f = File.Open(s.FileName, FileMode.OpenOrCreate, FileAccess.Write);
                 TranslateableREader r = new TranslateableREader();
@@ -92,9 +93,9 @@ namespace TranslateHelper
             SaveFileDialog s = new SaveFileDialog();
             s.DefaultExt = "xml";
             s.AddExtension = true;
-            if(s.ShowDialog() == DialogResult.OK)
+            if (s.ShowDialog() == DialogResult.OK)
             {
-                xmlExportImport.export(s.FileName,dataGridView1);
+                xmlExportImport.export(s.FileName, dataGridView1);
             }
         }
 
@@ -105,9 +106,9 @@ namespace TranslateHelper
             XMLExportImport xmlExportImport = new XMLExportImport();
             OpenFileDialog op = new OpenFileDialog();
             op.DefaultExt = "xml";
-            if(op.ShowDialog() == DialogResult.OK)
+            if (op.ShowDialog() == DialogResult.OK)
             {
-                xmlExportImport.import(op.FileName,dataGridView1);
+                xmlExportImport.import(op.FileName, dataGridView1);
             }
 
         }
@@ -118,7 +119,7 @@ namespace TranslateHelper
             foreach (DataGridViewRow item in dataGridView1.Rows)
             {
                 string target = Convert.ToString(item.Cells[1].Value);
-                if(target!=null)
+                if (target != null)
                 {
                     item.Cells[2].Value = hackyTranslate(target);
                     dataGridView1.Update();
@@ -159,7 +160,7 @@ namespace TranslateHelper
         {
             OpenFileDialog op = new OpenFileDialog();
 
-            if(op.ShowDialog() == DialogResult.OK)
+            if (op.ShowDialog() == DialogResult.OK)
             {
                 string fileName = op.FileName;
                 StreamReader file = new StreamReader(fileName);
@@ -168,11 +169,32 @@ namespace TranslateHelper
                 while ((line = file.ReadLine()) != null)
                 {
                     dataGridView1.Rows[counter].Cells[2].Value = line;
-                    counter++;    
+                    counter++;
                 }
 
             }
         }
-    }
 
+        private void button7_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in dataGridView1.Rows)
+            {
+
+                string baseString = item.Cells[1].Value.ToString();
+                string targetString = item.Cells[2].Value.ToString();
+
+                int baseStringCount = Regex.Matches(baseString,"%s").Count;
+                int targetStringCount = Regex.Matches(targetString,"%s").Count;
+
+                if(baseStringCount != targetStringCount)
+                {
+                    MessageBox.Show("some of your placeholders doesnt match: "+ item.Cells[0].Value.ToString());
+                    return;
+                }
+
+
+            }
+            MessageBox.Show("search completed");
+        }
+    }
 }
