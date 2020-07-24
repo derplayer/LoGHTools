@@ -179,18 +179,24 @@ namespace TranslateHelper
         {
             foreach (DataGridViewRow item in dataGridView1.Rows)
             {
+                if (item.Cells[1].Value == null) continue;
 
+                string sort = item.Cells[0].Value.ToString();
                 string baseString = item.Cells[1].Value.ToString();
                 string targetString = item.Cells[2].Value.ToString();
 
-                int baseStringCount = Regex.Matches(baseString,"%s").Count;
-                int targetStringCount = Regex.Matches(targetString,"%s").Count;
+                int baseStringCountString = Regex.Matches(baseString,"%s").Count;
+                int targetStringCountString = Regex.Matches(targetString,"%s").Count;
 
-                if(baseStringCount != targetStringCount)
+                int baseStringCountDouble = Regex.Matches(baseString, "%d").Count;
+                int targetStringCountDouble = Regex.Matches(targetString, "%d").Count;
+
+                if (baseStringCountString != targetStringCountString || baseStringCountDouble != targetStringCountDouble)
                 {
-                    MessageBox.Show("some of your placeholders doesnt match: "+ item.Cells[0].Value.ToString());
-                    return;
+                    MessageBox.Show("some of your placeholders doesnt match: "+ sort);
                 }
+
+
 
 
             }
