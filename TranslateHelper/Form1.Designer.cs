@@ -76,9 +76,9 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(3, 386);
+            this.button3.Location = new System.Drawing.Point(3, 396);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(72, 56);
+            this.button3.Size = new System.Drawing.Size(72, 46);
             this.button3.TabIndex = 3;
             this.button3.Text = "Export Serialized";
             this.button3.UseVisualStyleBackColor = true;
@@ -86,9 +86,9 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(3, 324);
+            this.button4.Location = new System.Drawing.Point(3, 344);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(72, 56);
+            this.button4.Size = new System.Drawing.Size(72, 46);
             this.button4.TabIndex = 4;
             this.button4.Text = "Load Serialized";
             this.button4.UseVisualStyleBackColor = true;
@@ -96,9 +96,9 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(4, 145);
+            this.button5.Location = new System.Drawing.Point(4, 155);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(71, 65);
+            this.button5.Size = new System.Drawing.Size(71, 52);
             this.button5.TabIndex = 5;
             this.button5.Text = "Translate From Google";
             this.button5.UseVisualStyleBackColor = true;
@@ -106,7 +106,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(3, 262);
+            this.button6.Location = new System.Drawing.Point(3, 282);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(72, 56);
             this.button6.TabIndex = 6;
@@ -116,9 +116,9 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(4, 216);
+            this.button7.Location = new System.Drawing.Point(4, 213);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(71, 40);
+            this.button7.Size = new System.Drawing.Size(71, 53);
             this.button7.TabIndex = 7;
             this.button7.Text = "Check PlaceHolders";
             this.button7.UseVisualStyleBackColor = true;
