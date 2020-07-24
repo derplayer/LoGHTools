@@ -4,6 +4,9 @@ Legend of Galactic Heroes (2008) Modtools
 # Status
 Basic UI elements and map names are machine translated
 
+You can find the latest translated datatable.mvx file [here](https://github.com/azisyus/LoGH-Translate.git).
+Basically you need to replace datatable.mvx with gameroot/data/mvx/datatable.mvx and you will ready to go.
+
 ![](https://github.com/azisyus/LoGHTools/blob/master/readme_assets/ginei_jp.png)
 ![](https://github.com/azisyus/LoGHTools/blob/master/readme_assets/ginei_en.jpg)
 
